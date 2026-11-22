@@ -111,7 +111,7 @@
     <h1><span class="icon icon-example">&nbsp;</span><span>Source Code</span></h1>
     <div class="statement-examples-text">
       The full referee, viewer, and starter bots source code is available on GitHub:
-      <a href="https://github.com/pmourey/codingame-chrono-tactics" target="_blank" rel="noopener noreferrer">https://github.com/pmourey/codingame-chrono-tactics</a>
+      <a href="https://github.com/codingame-team/codingame-chrono-tactics" target="_blank" rel="noopener noreferrer">https://github.com/codingame-team/codingame-chrono-tactics</a>
     </div>
   </div>
 </div>
