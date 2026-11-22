@@ -4,7 +4,7 @@
   <!-- LEAGUE ALERT -->
   <!-- BEGIN level1 -->
   <div style="color: #7cc576; background-color: rgba(124, 197, 118,.1); padding: 20px; margin-bottom: 15px; text-align: left">
-    <p style="margin-bottom: 0"><b>Wood 2 League:</b> Command <b>1 unit</b> to capture Chrono-Beacons across the arena. Special actions (<action>BOMB</action> and <action>PUSH</action>) will unlock in higher leagues.</p>
+    <p style="margin-bottom: 0"><b>Wood 2 League:</b> Command <b>1 unit</b> to capture Chrono-Beacons across the arena. Special tactical abilities will unlock in higher leagues.</p>
   </div>
   <!-- END -->
   <!-- BEGIN level2 -->
@@ -131,7 +131,12 @@
           <li><action>PUSH tx ty</action> where <var>tx</var> and <var>ty</var> are integer target coordinates at Manhattan distance <const>1</const> (requires <var>cooldown</var> = <const>0</const>)</li>
           <!-- END -->
         </ul>
+        <!-- BEGIN level1 -->
+        <p>You may optionally append <action>MSG text</action> at the end of a line to display a message in the viewer. Example: <action>MOVE 5 5</action></p>
+        <!-- END -->
+        <!-- BEGIN level2 level3 -->
         <p>You may optionally append <action>MSG text</action> at the end of a line to display a message in the viewer. Example: <action>MOVE 5 5 BOMB 6 5</action></p>
+        <!-- END -->
       </div>
     </div>
     <div class="blk">

@@ -4,7 +4,7 @@
   <!-- LEAGUE ALERT -->
   <!-- BEGIN level1 -->
   <div style="color: #7cc576; background-color: rgba(124, 197, 118,.1); padding: 20px; margin-bottom: 15px; text-align: left">
-    <p style="margin-bottom: 0"><b>Ligue Bois 2 :</b> Contrôlez <b>1 unité</b> pour capturer les Chrono-Balises de l'arène. Les actions spéciales (<action>BOMB</action> et <action>PUSH</action>) seront débloquées dans les ligues supérieures.</p>
+    <p style="margin-bottom: 0"><b>Ligue Bois 2 :</b> Contrôlez <b>1 unité</b> pour capturer les Chrono-Balises de l'arène. Des compétences tactiques spéciales seront débloquées dans les ligues supérieures.</p>
   </div>
   <!-- END -->
   <!-- BEGIN level2 -->
@@ -131,7 +131,12 @@
           <li><action>PUSH tx ty</action> où <var>tx</var> et <var>ty</var> sont des coordonnées entières à distance de Manhattan <const>1</const> (requiert <var>cooldown</var> = <const>0</const>)</li>
           <!-- END -->
         </ul>
+        <!-- BEGIN level1 -->
+        <p>Vous pouvez ajouter <action>MSG texte</action> en fin de ligne. Exemple : <action>MOVE 5 5</action></p>
+        <!-- END -->
+        <!-- BEGIN level2 level3 -->
         <p>Vous pouvez ajouter <action>MSG texte</action> en fin de ligne. Exemple : <action>MOVE 5 5 BOMB 6 5</action></p>
+        <!-- END -->
       </div>
     </div>
     <div class="blk">
