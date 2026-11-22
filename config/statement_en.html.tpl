@@ -1,0 +1,117 @@
+<!-- LEAGUES level1 level2 level3 -->
+<div id="statement_back" class="statement_back" style="display:none"></div>
+<div class="statement-body">
+  <!-- LEAGUE ALERT -->
+  <!-- BEGIN level1 -->
+  <div style="color: #7cc576; background-color: rgba(124, 197, 118,.1); padding: 20px; margin-bottom: 15px; text-align: left">
+    <p style="margin-bottom: 0"><b>Wood 2 League:</b> Command <b>1 unit</b> to capture Chrono-Beacons across the arena. Special actions (<code>BOMB</code> and <code>PUSH</code>) will unlock in higher leagues.</p>
+  </div>
+  <!-- END -->
+  <!-- BEGIN level2 -->
+  <div style="color: #7cc576; background-color: rgba(124, 197, 118,.1); padding: 20px; margin-bottom: 15px; text-align: left">
+    <p style="margin-bottom: 0"><b>Wood 1 League:</b> You now command <b>2 units</b> and unlock the <code>BOMB tx ty</code> ability (range &le; 2, cooldown 2) to degrade floor tiles and collapse bridges!</p>
+  </div>
+  <!-- END -->
+  <!-- BEGIN level3 -->
+  <div style="color: #7cc576; background-color: rgba(124, 197, 118,.1); padding: 20px; margin-bottom: 15px; text-align: left">
+    <p style="margin-bottom: 0"><b>Bronze+ League:</b> You now command <b>3 units</b>, unlock the <code>PUSH tx ty</code> ability (range 1, cooldown 2) to knock adjacent units into the abyss, and the outer ring of the arena degrades every 20 turns!</p>
+  </div>
+  <!-- END -->
+
+  <!-- GOAL -->
+  <div class="statement-section statement-goal">
+    <h1><span class="icon icon-goal">&nbsp;</span><span>The Goal</span></h1>
+    <div class="statement-goal-content">
+      Outscore your opponent over <b>120 turns</b> by capturing <b>Chrono-Beacons</b> and keeping your tactical squad alive on a crumbling grid arena.
+    </div>
+  </div>
+
+  <!-- RULES -->
+  <div class="statement-section statement-rules">
+    <h1><span class="icon icon-rules">&nbsp;</span><span>Rules</span></h1>
+    <div class="statement-rules-content">
+      <p>The game is played on a symmetric <b>11&times;11</b> grid where each cell is one of:</p>
+      <ul>
+        <li><const>0</const>: Void abyss (impassable; any unit ending up on a <const>0</const> cell is eliminated).</li>
+        <li><const>1</const>, <const>2</const>, <const>3</const>: Walkable floor tile with its current structural integrity.</li>
+        <li><const>#</const>: Indestructible pillar (impassable obstacle).</li>
+      </ul>
+
+      <h3 style="font-size: 16px; font-weight: 700; padding-top: 10px">Turn Resolution Order</h3>
+      <ol>
+        <li><b>Simultaneous Movement (<action>MOVE x y</action>):</b> Each unit takes 1 orthogonal step along the shortest walkable path toward <var>(x, y)</var>. If two units attempt to enter the same tile or swap positions, neither moves.</li>
+        <!-- BEGIN level3 -->
+        <li><b>Tactical Push (<action>PUSH tx ty</action>):</b> If <var>cooldown == 0</var> and <var>(tx, ty)</var> is orthogonally adjacent (Manhattan distance 1), any unit at <var>(tx, ty)</var> is pushed 1 cell away in the same direction:
+          <ul>
+            <li>If pushed into the void (<const>0</const>) or outside the grid, the pushed unit is <b>eliminated</b> and the pusher gains <b>+15 bonus points</b>!</li>
+            <li>If pushed into a pillar (<const>#</const>) or another unit, the target stays in place and its cooldown increases by <const>+2</const> (stunned).</li>
+          </ul>
+          Sets the acting unit's cooldown to <const>2</const>.
+        </li>
+        <!-- END -->
+        <!-- BEGIN level2 level3 -->
+        <li><b>Tile Demolition (<action>BOMB tx ty</action>):</b> If <var>cooldown == 0</var> and <var>1 &le; ManhattanDistance &le; 2</var>, reduces the integrity of tile <var>(tx, ty)</var> by <const>1</const>. If integrity reaches <const>0</const>, the tile collapses into void: any beacon on it is destroyed and any unit standing on it is <b>eliminated</b>! Sets the acting unit's cooldown to <const>2</const>.</li>
+        <!-- END -->
+        <!-- BEGIN level3 -->
+        <li><b>Chrono-Storm Ring Collapse:</b> Every <const>20</const> turns (turns 20, 40, 60, 80, 100), the outermost active ring of the arena loses <const>1</const> integrity (pillars on that ring turn into integrity <const>1</const> floor tiles).</li>
+        <!-- END -->
+        <li><b>Beacon Capture &amp; Scoring:</b> A unit standing on an active Chrono-Beacon captures it for its owner. At the end of each turn, each player gains:
+          <ul>
+            <li><b>+2 points</b> per controlled Chrono-Beacon,</li>
+            <li><b>+1 point</b> per alive unit.</li>
+          </ul>
+        </li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- PROTOCOL -->
+  <div class="statement-section statement-protocol">
+    <h1><span class="icon icon-protocol">&nbsp;</span><span>Game Input &amp; Output</span></h1>
+    <div class="statement-protocol-content">
+      <div class="blk">
+        <div class="title">Initialization Input</div>
+        <div class="text">
+          Line 1: <var>width</var> <var>height</var> <var>leagueLevel</var> (<const>11 11</const> and the current league level).
+        </div>
+      </div>
+      <div class="blk">
+        <div class="title">Input for One Game Turn</div>
+        <div class="text">
+          <ul>
+            <li>Next <var>height</var> lines: string <var>row</var> of length <var>width</var> (<const>0</const>, <const>1</const>-<const>3</const>, or <const>#</const>).</li>
+            <li>Next line: <var>unitCount</var>, the total number of alive units.</li>
+            <li>Next <var>unitCount</var> lines: <var>unitId</var> <var>owner</var> <var>x</var> <var>y</var> <var>cooldown</var> (<var>owner</var> is always <const>0</const> for your units, listed first, and <const>1</const> for opponent units).</li>
+            <li>Next line: <var>beaconCount</var>, the number of active beacons.</li>
+            <li>Next <var>beaconCount</var> lines: <var>bx</var> <var>by</var> <var>beaconOwner</var> (<const>-1</const>=neutral, <const>0</const>=yours, <const>1</const>=opponent).</li>
+          </ul>
+        </div>
+      </div>
+      <div class="blk">
+        <div class="title">Output for One Game Turn</div>
+        <div class="text">
+          Output <b>one line per alive unit you own</b> (in the exact order they appear in the input):
+          <ul>
+            <li><action>MOVE x y</action> (or <action>WAIT</action>) optionally followed by:</li>
+            <!-- BEGIN level2 level3 -->
+            <li><action>BOMB tx ty</action> (Manhattan distance <const>1</const> or <const>2</const>, requires <var>cooldown == 0</var>)</li>
+            <!-- END -->
+            <!-- BEGIN level3 -->
+            <li><action>PUSH tx ty</action> (Manhattan distance <const>1</const>, requires <var>cooldown == 0</var>)</li>
+            <!-- END -->
+          </ul>
+          Example: <action>MOVE 5 5 BOMB 6 5</action>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SOURCE CODE -->
+  <div class="statement-section statement-examples">
+    <h1><span class="icon icon-example">&nbsp;</span><span>Source Code</span></h1>
+    <div class="statement-examples-text">
+      The full referee, viewer, and starter bots source code is available on GitHub:
+      <a href="https://github.com/pmourey/codingame-chrono-tactics" target="_blank" rel="noopener noreferrer">https://github.com/pmourey/codingame-chrono-tactics</a>
+    </div>
+  </div>
+</div>

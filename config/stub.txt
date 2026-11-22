@@ -1,0 +1,30 @@
+read width:int height:int leagueLevel:int
+gameloop
+loop height read row:word(16)
+read unitCount:int
+loop unitCount read unitId:int owner:int x:int y:int cooldown:int
+read beaconCount:int
+loop beaconCount read bx:int by:int beaconOwner:int
+write join("MOVE", "5", "5")
+
+STATEMENT
+Command your tactical squad in a collapsing arena! Capture Chrono-Beacons, bomb fragile bridges to isolate enemy units, and push rivals into the abyss.
+
+INPUT
+width: Width of the arena grid (11)
+height: Height of the arena grid (11)
+leagueLevel: Current league level (1=Wood 2, 2=Wood 1, 3=Bronze+)
+row: One row of the grid ('0'=void abyss, '1'-'3'=tile integrity, '#'=indestructible pillar)
+unitCount: Total number of alive units on the grid
+unitId: Unique identifier of the unit
+owner: 0 if you own this unit, 1 if owned by your opponent
+x: X coordinate of the unit (0 to width-1)
+y: Y coordinate of the unit (0 to height-1)
+cooldown: Turns left before this unit can use BOMB or PUSH
+beaconCount: Number of active Chrono-Beacons on the grid
+bx: X coordinate of the beacon
+by: Y coordinate of the beacon
+beaconOwner: -1 if neutral, 0 if controlled by you, 1 if controlled by your opponent
+
+OUTPUT
+One line per alive unit you own (in the order your units were given): MOVE <x> <y> [BOMB <tx> <ty> | PUSH <tx> <ty> | WAIT] [MSG <text>]
