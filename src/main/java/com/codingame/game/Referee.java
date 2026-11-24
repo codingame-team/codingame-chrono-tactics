@@ -40,6 +40,8 @@ public class Referee extends AbstractReferee {
     private Sprite[][] tileSprites;
     private Text[][] tileOverlayTexts;
     private Text turnText;
+    private Text stormText;
+    private final Rectangle[] stormBands = new Rectangle[4];
     private Sprite fxExplosionPool;
     private Sprite fxPushPool;
     private int leagueLevel;
@@ -269,6 +271,82 @@ public class Referee extends AbstractReferee {
             .setBaseHeight(60)
             .setVisible(false)
             .setZIndex(14);
+
+        // Pre-allocated Chrono-Storm ring overlay & bottom HUD countdown (Wood 1 / leagueLevel >= 3)
+        if (leagueLevel >= 3) {
+            for (int i = 0; i < 4; i++) {
+                stormBands[i] = graphicEntityModule.createRectangle()
+                    .setFillColor(0xff9f1c)
+                    .setFillAlpha(0.24)
+                    .setLineColor(0xffbe0b)
+                    .setLineWidth(3)
+                    .setVisible(false)
+                    .setZIndex(6);
+            }
+            stormText = graphicEntityModule.createText("CHRONO-STORM: RING r=5 IN 20 TURNS")
+                .setX(960)
+                .setY(1040)
+                .setAnchor(0.5)
+                .setFontFamily("Lato")
+                .setFontSize(30)
+                .setFillColor(0xffd166)
+                .setStrokeThickness(4)
+                .setStrokeColor(0x000000)
+                .setZIndex(20);
+        }
+    }
+
+    private void positionStormBands(int r, int fillColor, double fillAlpha, int lineColor, int lineWidth) {
+        int center = Grid.WIDTH / 2; // 5
+        int minC = center - r;
+        int maxC = center + r;
+        int span = (2 * r + 1) * CELL_SIZE;
+        int innerSpan = Math.max(0, (2 * r - 1) * CELL_SIZE);
+        int leftX = BOARD_ORIGIN_X + minC * CELL_SIZE;
+        int topY = BOARD_ORIGIN_Y + minC * CELL_SIZE;
+        int rightX = BOARD_ORIGIN_X + maxC * CELL_SIZE;
+        int bottomY = BOARD_ORIGIN_Y + maxC * CELL_SIZE;
+
+        // Top band
+        stormBands[0].setX(leftX).setY(topY).setWidth(span).setHeight(CELL_SIZE)
+            .setFillColor(fillColor).setFillAlpha(fillAlpha).setLineColor(lineColor).setLineWidth(lineWidth).setVisible(true);
+        // Bottom band
+        stormBands[1].setX(leftX).setY(bottomY).setWidth(span).setHeight(CELL_SIZE)
+            .setFillColor(fillColor).setFillAlpha(fillAlpha).setLineColor(lineColor).setLineWidth(lineWidth).setVisible(true);
+        // Left inner band
+        stormBands[2].setX(leftX).setY(topY + CELL_SIZE).setWidth(CELL_SIZE).setHeight(innerSpan)
+            .setFillColor(fillColor).setFillAlpha(fillAlpha).setLineColor(lineColor).setLineWidth(lineWidth).setVisible(innerSpan > 0);
+        // Right inner band
+        stormBands[3].setX(rightX).setY(topY + CELL_SIZE).setWidth(CELL_SIZE).setHeight(innerSpan)
+            .setFillColor(fillColor).setFillAlpha(fillAlpha).setLineColor(lineColor).setLineWidth(lineWidth).setVisible(innerSpan > 0);
+    }
+
+    private void updateStormVisuals(int turn, int hitRing) {
+        if (leagueLevel < 3 || stormText == null) return;
+        if (hitRing >= 2) {
+            // Impact flash on the ring that just degraded
+            positionStormBands(hitRing, 0xff2a6d, 0.48, 0xffffff, 4);
+            stormText.setText("CHRONO-STORM HITS RING r=" + hitRing + "! (-1 INTEGRITY)")
+                .setFillColor(0xff4d6d);
+            return;
+        }
+        if (collapseRing < 2) {
+            for (Rectangle b : stormBands) b.setVisible(false);
+            stormText.setText("CHRONO-STORM COMPLETE (INNER SANCTUARY SAFE)")
+                .setFillColor(0x90e0ef);
+            return;
+        }
+        int nextStormTurn = (6 - collapseRing) * 20; // r=5 -> 20, r=4 -> 40, r=3 -> 60, r=2 -> 80
+        int turnsLeft = nextStormTurn - turn;
+        if (turnsLeft <= 3 && turnsLeft >= 1) {
+            positionStormBands(collapseRing, 0xff9f1c, 0.24, 0xffbe0b, 3);
+            stormText.setText("CHRONO-STORM WARNING: RING r=" + collapseRing + " IN " + turnsLeft + (turnsLeft == 1 ? " TURN!" : " TURNS!"))
+                .setFillColor(0xff9f1c);
+        } else {
+            for (Rectangle b : stormBands) b.setVisible(false);
+            stormText.setText("CHRONO-STORM: RING r=" + collapseRing + " IN " + turnsLeft + " TURNS")
+                .setFillColor(0xffd166);
+        }
     }
 
     private void updateTileSprite(int x, int y) {
@@ -351,9 +429,12 @@ public class Referee extends AbstractReferee {
         resolveBombs();
 
         // 5. Resolve Periodic Arena Ring Collapse in League 3+
+        int hitRing = -1;
         if (leagueLevel >= 3 && turn > 0 && turn % 20 == 0 && collapseRing >= 2) {
+            hitRing = collapseRing;
             resolveRingCollapse();
         }
+        updateStormVisuals(turn, hitRing);
 
         // 6. Capture Beacons & Update Scores
         updateBeaconsAndScores();
