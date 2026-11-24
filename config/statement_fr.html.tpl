@@ -4,17 +4,17 @@
   <!-- LEAGUE ALERT -->
   <!-- BEGIN level1 -->
   <div style="color: #7cc576; background-color: rgba(124, 197, 118,.1); padding: 20px; margin-bottom: 15px; text-align: left">
-    <p style="margin-bottom: 0"><b>Ligue Bois 2 :</b> Contrôlez <b>1 unité</b> pour capturer les Chrono-Balises de l'arène. Des compétences tactiques spéciales seront débloquées dans les ligues supérieures.</p>
+    <p style="margin-bottom: 0"><b>Ligue Bois 3 :</b> Contrôlez <b>1 unité</b> pour capturer les Chrono-Balises de l'arène. Des compétences tactiques spéciales seront débloquées dans les divisions supérieures.</p>
   </div>
   <!-- END -->
   <!-- BEGIN level2 -->
   <div style="color: #7cc576; background-color: rgba(124, 197, 118,.1); padding: 20px; margin-bottom: 15px; text-align: left">
-    <p style="margin-bottom: 0"><b>Ligue Bois 1 :</b> Vous contrôlez désormais <b>2 unités</b> et débloquez l'action <action>BOMB tx ty</action> (portée &le; <const>2</const>, recharge <const>2</const> tours) pour dégrader les dalles et faire s'effondrer les ponts !</p>
+    <p style="margin-bottom: 0"><b>Ligue Bois 2 :</b> Vous contrôlez désormais <b>2 unités</b> et débloquez l'action <action>BOMB</action> (portée &le; <const>2</const>, recharge <const>2</const> tours) pour dégrader les cases et faire s'effondrer les ponts !</p>
   </div>
   <!-- END -->
   <!-- BEGIN level3 -->
   <div style="color: #7cc576; background-color: rgba(124, 197, 118,.1); padding: 20px; margin-bottom: 15px; text-align: left">
-    <p style="margin-bottom: 0"><b>Ligue Bronze+ :</b> Vous contrôlez désormais <b>3 unités</b>, débloquez l'action <action>PUSH tx ty</action> (portée <const>1</const>, recharge <const>2</const> tours) pour pousser les unités adjacentes dans l'abîme, et l'anneau extérieur de l'arène se dégrade tous les <const>20</const> tours !</p>
+    <p style="margin-bottom: 0"><b>Ligue Bois 1 :</b> Vous contrôlez désormais <b>3 unités</b>, débloquez l'action <action>PUSH</action> (portée <const>1</const>, recharge <const>2</const> tours) pour pousser les unités adjacentes dans l'abîme, et l'anneau extérieur de l'arène se dégrade tous les <const>20</const> tours !</p>
   </div>
   <!-- END -->
 
@@ -22,7 +22,12 @@
   <div class="statement-section statement-goal">
     <h1><span class="icon icon-goal">&nbsp;</span><span>Objectif</span></h1>
     <div class="statement-goal-content">
+      <!-- BEGIN level1 -->
+      Obtenez un score supérieur à votre adversaire en <const>120</const> tours en capturant les <b>Chrono-Balises</b> sur une arène en grille.
+      <!-- END -->
+      <!-- BEGIN level2 level3 -->
       Obtenez un score supérieur à votre adversaire en <const>120</const> tours en capturant les <b>Chrono-Balises</b> et en maintenant votre escouade tactique en vie sur une arène qui s'effondre.
+      <!-- END -->
     </div>
   </div>
 
@@ -30,39 +35,66 @@
   <div class="statement-section statement-rules">
     <h1><span class="icon icon-rules">&nbsp;</span><span>Règles</span></h1>
     <div class="statement-rules-content">
-      <p>La partie se déroule sur une grille symétrique <const>11</const>&times;<const>11</const> où chaque case possède l'un des états suivants :</p>
+      <p>La partie se déroule sur une grille <const>11</const>&times;<const>11</const> à symétrie centrale. Les coordonnées suivent la convention standard : <var>x</var> croît vers la droite, <var>y</var> croît vers le bas et <const>(0, 0)</const> correspond au coin supérieur gauche. Chaque case possède l'un des états suivants :</p>
       <ul>
-        <li><const>0</const> : Gouffre / Vide (infranchissable ; toute unité se retrouvant sur une case <const>0</const> est éliminée).</li>
-        <li><const>1</const>, <const>2</const>, <const>3</const> : Dalle praticable avec son intégrité structurelle actuelle.</li>
+        <!-- BEGIN level1 -->
+        <li><const>0</const> : Gouffre / Vide (infranchissable ; les unités ne peuvent pas s'y déplacer volontairement).</li>
+        <li><const>1</const>, <const>2</const>, <const>3</const> : Case praticable (les valeurs d'intégrité n'ont aucun effet en Bois 3, car les cases ne s'effondrent pas dans cette division).</li>
+        <!-- END -->
+        <!-- BEGIN level2 level3 -->
+        <li><const>0</const> : Gouffre / Vide (infranchissable ; les unités ne peuvent pas s'y déplacer volontairement et toute unité se retrouvant sur une case <const>0</const> est éliminée).</li>
+        <li><const>1</const>, <const>2</const>, <const>3</const> : Case praticable avec son intégrité structurelle actuelle.</li>
+        <!-- END -->
         <li><const>#</const> : Pilier indestructible (obstacle infranchissable).</li>
       </ul>
 
       <h3 style="font-size: 16px; font-weight: 700; padding-top: 10px">Ordre de Résolution d'un Tour</h3>
       <ol>
-        <li><b>Déplacement Simultané (<action>MOVE x y</action>) :</b> Chaque unité avance de <const>1</const> case orthogonalement le long du plus court chemin praticable vers (<var>x</var>, <var>y</var>). Si deux unités tentent d'entrer sur la même case ou d'échanger leurs positions, aucune des deux ne bouge.</li>
+        <li><b>Déplacement Simultané (<action>MOVE</action> <var>x</var> <var>y</var> ou <action>WAIT</action>) :</b> Chaque unité avance de <const>1</const> case orthogonalement le long du plus court chemin praticable vers (<var>x</var>, <var>y</var>), sans jamais entrer volontairement sur une case vide (<const>0</const>) ou un pilier (<const>#</const>). Si deux unités tentent d'entrer sur la même case ou d'échanger leurs positions, ou si le pas d'une unité est bloqué par une unité immobile, les unités bloquées restent sur place.</li>
         <!-- BEGIN level3 -->
-        <li><b>Poussée Tactique (<action>PUSH tx ty</action>) :</b> Si <var>cooldown</var> vaut <const>0</const> et que (<var>tx</var>, <var>ty</var>) est orthogonalement adjacente (distance de Manhattan de <const>1</const>), l'unité présente en (<var>tx</var>, <var>ty</var>) est repoussée de <const>1</const> case dans la même direction :
+        <li><b>Poussée Tactique (<action>PUSH</action> <var>tx</var> <var>ty</var>) :</b> Toutes les commandes <action>PUSH</action> sont d'abord validées sur les positions post-déplacement (en vérifiant <var>cooldown</var> = <const>0</const> et que (<var>tx</var>, <var>ty</var>) est orthogonalement adjacente à l'unité agissante, soit une distance de Manhattan de <const>1</const>), et chaque pousseur valide voit immédiatement son <var>cooldown</var> passer à <const>2</const>. Les poussées enregistrées sont ensuite exécutées dans l'ordre des identifiants d'unités (unités du Joueur 0, puis du Joueur 1). Toute unité en (<var>tx</var>, <var>ty</var>) &mdash; alliée ou adverse (pousser un allié permet de le déplacer d'une case supplémentaire dans le même tour) &mdash; est repoussée de <const>1</const> case dans la direction de la poussée :
           <ul>
-            <li>Si elle est poussée dans le vide (<const>0</const>) ou hors de la grille, l'unité poussée est <b>éliminée</b> et le pousseur gagne <b>+<const>15</const> points bonus</b> !</li>
+            <li>Si elle est poussée dans le vide (<const>0</const>) ou hors de la grille, l'unité poussée est <b>éliminée</b>. Si elle appartenait à l'adversaire, le pousseur gagne <b>+<const>15</const> points bonus</b> !</li>
             <li>Si elle est poussée contre un pilier (<const>#</const>) ou une autre unité, la cible reste sur place et son <var>cooldown</var> augmente de <const>2</const> (étourdie).</li>
           </ul>
-          Passe le <var>cooldown</var> de l'unité qui pousse à <const>2</const>.
+          Comme toutes les poussées sont validées avant l'application des effets, si deux unités adjacentes se poussent mutuellement au même tour, les deux poussées sont exécutées (et si l'une heurte un obstacle, son <var>cooldown</var> passe de <const>2</const> à <const>4</const>).
         </li>
         <!-- END -->
         <!-- BEGIN level2 level3 -->
-        <li><b>Démolition de Dalle (<action>BOMB tx ty</action>) :</b> Si <var>cooldown</var> vaut <const>0</const> et que la distance de Manhattan vers (<var>tx</var>, <var>ty</var>) vaut <const>1</const> ou <const>2</const>, réduit de <const>1</const> l'intégrité de la dalle (<var>tx</var>, <var>ty</var>). Si l'intégrité tombe à <const>0</const>, la dalle s'effondre dans le vide : toute balise dessus est détruite et toute unité qui s'y trouve est <b>éliminée</b> ! Passe le <var>cooldown</var> de l'unité à <const>2</const>.</li>
+        <li><b>Démolition de Case (<action>BOMB</action> <var>tx</var> <var>ty</var>) :</b> Si <var>cooldown</var> vaut <const>0</const> et que la distance de Manhattan de l'unité agissante vers (<var>tx</var>, <var>ty</var>) vaut <const>1</const> ou <const>2</const>, réduit de <const>1</const> l'intégrité de la case (<var>tx</var>, <var>ty</var>) et passe le <var>cooldown</var> de l'unité à <const>2</const>. Si plusieurs unités bombardent la même case au même tour, les réductions d'intégrité se cumulent. Si l'intégrité tombe à <const>0</const>, la case s'effondre dans le vide : toute balise dessus est détruite et toute unité qui s'y trouve est <b>éliminée</b> !</li>
         <!-- END -->
         <!-- BEGIN level3 -->
-        <li><b>Tempête Temporelle (Effondrement Annulaire) :</b> Tous les <const>20</const> tours (tours <const>20</const>, <const>40</const>, <const>60</const>, <const>80</const>, <const>100</const>), l'anneau extérieur actif de l'arène perd <const>1</const> point d'intégrité (les piliers de cet anneau deviennent des dalles d'intégrité <const>1</const>).</li>
+        <li><b>Tempête Temporelle (Effondrement Annulaire) :</b> Tous les <const>20</const> tours (tours <const>20</const>, <const>40</const>, <const>60</const> et <const>80</const>), l'anneau extérieur actif de l'arène se dégrade. Un anneau de rayon <var>r</var> regroupe toutes les cases dont la distance de Tchebychev au centre (<const>5</const>, <const>5</const>) vaut <const>max(|x - 5|, |y - 5|) = r</const>, en commençant à <var>r</var> = <const>5</const> au tour <const>20</const> puis en rétrécissant de <const>1</const> tous les <const>20</const> tours (<var>r</var> = <const>5, 4, 3, 2</const>). Sur cet anneau :
+          <ul>
+            <li>Chaque case praticable (<const>1</const>&ndash;<const>3</const>) perd <const>1</const> point d'intégrité et s'effondre dans le vide (<const>0</const>) si elle atteint <const>0</const>.</li>
+            <li>Chaque pilier (<const>#</const>) est fissuré par la tempête et devient une case praticable d'intégrité <const>1</const>.</li>
+          </ul>
+        </li>
         <!-- END -->
-        <li><b>Capture des Balises &amp; Score :</b> Une unité située sur une Chrono-Balise active la capture pour son propriétaire. À la fin de chaque tour, chaque joueur gagne :
+        <!-- BEGIN level1 -->
+        <li><b>Capture des Balises &amp; Score :</b> Une unité située sur une Chrono-Balise active la capture pour son propriétaire. Une fois capturée, la balise reste sous le contrôle de ce joueur même lorsque l'unité quitte la case, jusqu'à ce qu'une unité adverse s'y arrête (transférant le contrôle). À la fin de chaque tour, chaque joueur gagne :
+        <!-- END -->
+        <!-- BEGIN level2 level3 -->
+        <li><b>Capture des Balises &amp; Score :</b> Une unité située sur une Chrono-Balise active la capture pour son propriétaire. Une fois capturée, la balise reste sous le contrôle de ce joueur même lorsque l'unité quitte la case, jusqu'à ce qu'une unité adverse s'y arrête (transférant le contrôle) ou que la case s'effondre dans le vide. À la fin de chaque tour, chaque joueur gagne :
+        <!-- END -->
           <ul>
             <li><b>+<const>2</const> points</b> par Chrono-Balise contrôlée,</li>
             <li><b>+<const>1</const> point</b> par unité en vie.</li>
           </ul>
+          <!-- BEGIN level2 level3 -->
           Si toutes les unités d'un joueur sont éliminées, la partie s'arrête immédiatement et le survivant reçoit <b>+<const>20</const> points bonus</b> par unité encore en vie.
+          <!-- END -->
         </li>
       </ol>
+      <!-- BEGIN level1 -->
+      <p><b>Actions inexécutables :</b> Les commandes syntaxiquement valides mais inexécutables (par exemple <action>MOVE</action> hors grille ou vers un obstacle/case occupée) sont simplement ignorées et n'entraînent pas la défaite.</p>
+      <!-- END -->
+      <!-- BEGIN level2 -->
+      <p><b>Actions inexécutables :</b> Les commandes syntaxiquement valides mais inexécutables (par exemple <action>MOVE</action> hors grille ou vers un obstacle/case occupée, ou <action>BOMB</action> avec <var>cooldown</var> &gt; <const>0</const> ou hors portée) sont simplement ignorées et n'entraînent pas la défaite. Cibler un pilier ou le vide avec <action>BOMB</action> à portée lorsque <var>cooldown</var> = <const>0</const> n'a aucun effet sur la case mais déclenche tout de même la recharge de <const>2</const> tours.</p>
+      <!-- END -->
+      <!-- BEGIN level3 -->
+      <p><b>Actions inexécutables :</b> Les commandes syntaxiquement valides mais inexécutables (par exemple <action>MOVE</action> hors grille ou vers un obstacle/case occupée, ou <action>BOMB</action>/<action>PUSH</action> avec <var>cooldown</var> &gt; <const>0</const> ou hors portée) sont simplement ignorées et n'entraînent pas la défaite. Cibler un pilier ou le vide avec <action>BOMB</action> à portée lorsque <var>cooldown</var> = <const>0</const> n'a aucun effet sur la case mais déclenche tout de même la recharge de <const>2</const> tours.</p>
+      <!-- END -->
 
       <!-- VICTORY CONDITIONS -->
       <div class="statement-victory-conditions">
@@ -71,7 +103,12 @@
           <div class="title">Conditions de Victoire</div>
           <div class="text">
             <ul style="padding-bottom:0">
+              <!-- BEGIN level1 -->
+              <li>Vous avez plus de points que votre adversaire à la fin de la partie (après <const>120</const> tours).</li>
+              <!-- END -->
+              <!-- BEGIN level2 level3 -->
               <li>Vous avez plus de points que votre adversaire à la fin de la partie (après <const>120</const> tours ou lorsqu'une escouade est éliminée).</li>
+              <!-- END -->
             </ul>
           </div>
         </div>
@@ -85,7 +122,7 @@
           <div class="text">
             <ul style="padding-bottom:0">
               <li>Vous avez moins de points que votre adversaire à la fin de la partie.</li>
-              <li>Votre programme ne répond pas dans le temps imparti ou affiche une commande non reconnue.</li>
+              <li>Votre programme ne répond pas dans le temps imparti ou affiche une commande mal formée / non reconnue.</li>
             </ul>
           </div>
         </div>
@@ -99,20 +136,26 @@
     <div class="blk">
       <div class="title">Entrées d'Initialisation</div>
       <div class="text">
-        <p><span class="statement-lineno">Ligne 1 :</span> 3 entiers séparés par des espaces <var>width</var>, <var>height</var> et <var>leagueLevel</var>, la largeur et la hauteur de la grille (<const>11</const>&times;<const>11</const>) ainsi que le niveau de la ligue actuelle (<const>1</const>, <const>2</const> ou <const>3</const>).</p>
+        <p><span class="statement-lineno">Ligne 1 :</span> 3 entiers séparés par des espaces <var>width</var>, <var>height</var> et <var>leagueLevel</var>, la largeur et la hauteur de la grille (<const>11</const>&times;<const>11</const>) ainsi que la division Bois actuelle (<const>3</const> pour Bois 3, <const>2</const> pour Bois 2, <const>1</const> pour Bois 1).</p>
       </div>
     </div>
     <div class="blk">
       <div class="title">Entrées pour un Tour de Jeu</div>
       <div class="text">
-        <p><span class="statement-lineno"><var>height</var> lignes :</span> une chaîne de caractères <var>row</var> de longueur <var>width</var> représentant une ligne de la grille (<const>0</const> pour le vide, <const>1</const>-<const>3</const> pour l'intégrité d'une dalle, ou <const>#</const> pour un pilier indestructible).</p>
+        <p><span class="statement-lineno">Ligne 1 :</span> un entier <var>turn</var>, le numéro du tour courant (<const>1</const> à <const>120</const>).</p>
+        <p><span class="statement-lineno">Les <var>height</var> lignes suivantes :</span> une chaîne de caractères <var>row</var> de longueur <var>width</var> représentant une ligne de la grille (<const>0</const> pour le vide, <const>1</const>&ndash;<const>3</const> pour l'intégrité d'une case, ou <const>#</const> pour un pilier indestructible).</p>
         <p><span class="statement-lineno">Ligne suivante :</span> un entier <var>unitCount</var>, le nombre total d'unités en vie sur la grille.</p>
         <p><span class="statement-lineno">Les <var>unitCount</var> lignes suivantes :</span> 5 entiers séparés par des espaces <var>unitId</var>, <var>owner</var>, <var>x</var>, <var>y</var> et <var>cooldown</var> :</p>
         <ul>
           <li><var>unitId</var> : identifiant unique de l'unité.</li>
           <li><var>owner</var> : <const>0</const> si l'unité vous appartient (vos unités sont toujours listées en premier), <const>1</const> si elle appartient à votre adversaire.</li>
           <li><var>x</var>, <var>y</var> : coordonnées de l'unité sur la grille.</li>
+          <!-- BEGIN level1 -->
+          <li><var>cooldown</var> : vaut toujours <const>0</const> en Bois 3, les actions spéciales n'étant pas disponibles dans cette division.</li>
+          <!-- END -->
+          <!-- BEGIN level2 level3 -->
           <li><var>cooldown</var> : nombre de tours restants avant que cette unité puisse utiliser une action spéciale.</li>
+          <!-- END -->
         </ul>
         <p><span class="statement-lineno">Ligne suivante :</span> un entier <var>beaconCount</var>, le nombre de Chrono-Balises actives.</p>
         <p><span class="statement-lineno">Les <var>beaconCount</var> lignes suivantes :</span> 3 entiers séparés par des espaces <var>bx</var>, <var>by</var> et <var>beaconOwner</var>, les coordonnées de la balise et son propriétaire (<const>-1</const> si neutre, <const>0</const> si elle est à vous, <const>1</const> si elle est à l'adversaire).</p>
@@ -121,30 +164,50 @@
     <div class="blk">
       <div class="title">Sortie pour un Tour de Jeu</div>
       <div class="text">
-        <p><span class="statement-lineno">Une ligne par unité en vie que vous possédez</span> (dans l'ordre exact où elles apparaissent en entrée) : une commande de déplacement éventuellement suivie d'une action spéciale :</p>
-        <ul>
-          <li><action>MOVE x y</action> (ou <action>WAIT</action>) où <var>x</var> et <var>y</var> sont des coordonnées entières, éventuellement suivi de :</li>
-          <!-- BEGIN level2 level3 -->
-          <li><action>BOMB tx ty</action> où <var>tx</var> et <var>ty</var> sont des coordonnées entières à distance de Manhattan <const>1</const> ou <const>2</const> (requiert <var>cooldown</var> = <const>0</const>)</li>
-          <!-- END -->
-          <!-- BEGIN level3 -->
-          <li><action>PUSH tx ty</action> où <var>tx</var> et <var>ty</var> sont des coordonnées entières à distance de Manhattan <const>1</const> (requiert <var>cooldown</var> = <const>0</const>)</li>
-          <!-- END -->
-        </ul>
         <!-- BEGIN level1 -->
-        <p>Vous pouvez ajouter <action>MSG texte</action> en fin de ligne. Exemple : <action>MOVE 5 5</action></p>
+        <p><span class="statement-lineno">Une ligne par unité en vie que vous possédez</span> (dans l'ordre exact où elles apparaissent en entrée), contenant une commande de déplacement :</p>
         <!-- END -->
         <!-- BEGIN level2 level3 -->
-        <p>Vous pouvez ajouter <action>MSG texte</action> en fin de ligne. Exemple : <action>MOVE 5 5 BOMB 6 5</action></p>
+        <p><span class="statement-lineno">Une ligne par unité en vie que vous possédez</span> (dans l'ordre exact où elles apparaissent en entrée), contenant une commande de déplacement éventuellement suivie d'une action spéciale :</p>
         <!-- END -->
+        <ul>
+          <li><action>MOVE</action> <var>x</var> <var>y</var> pour déplacer l'unité vers les coordonnées entières (<var>x</var>, <var>y</var>).</li>
+          <li><action>WAIT</action> pour laisser l'unité immobile.</li>
+        </ul>
+        <!-- BEGIN level2 level3 -->
+        <p>Une commande <action>MOVE</action> ou <action>WAIT</action> peut être suivie d'une action spéciale :</p>
+        <ul>
+          <li><action>BOMB</action> <var>tx</var> <var>ty</var> pour bombarder la case aux coordonnées entières (<var>tx</var>, <var>ty</var>).</li>
+          <!-- BEGIN level3 -->
+          <li><action>PUSH</action> <var>tx</var> <var>ty</var> pour pousser une unité aux coordonnées entières (<var>tx</var>, <var>ty</var>).</li>
+          <!-- END -->
+        </ul>
+        <!-- END -->
+        <!-- BEGIN level1 -->
+        <p>Exemple : <action>MOVE 5 5</action></p>
+        <!-- END -->
+        <!-- BEGIN level2 level3 -->
+        <p>Exemple : <action>MOVE 5 5 BOMB 6 5</action></p>
+        <!-- END -->
+        <p>Vous pouvez facultativement ajouter <action>MSG</action> <var>text</var> en fin de ligne pour afficher un message dans le viewer.</p>
       </div>
     </div>
     <div class="blk">
       <div class="title">Contraintes</div>
       <div class="text">
         <var>width</var> = <const>11</const>, <var>height</var> = <const>11</const><br>
+        <!-- BEGIN level1 -->
+        <var>unitCount</var> = <const>2</const><br>
+        <var>beaconCount</var> = <const>7</const><br>
+        <!-- END -->
+        <!-- BEGIN level2 -->
+        <const>1</const> &le; <var>unitCount</var> &le; <const>4</const><br>
+        <const>0</const> &le; <var>beaconCount</var> &le; <const>7</const><br>
+        <!-- END -->
+        <!-- BEGIN level3 -->
         <const>1</const> &le; <var>unitCount</var> &le; <const>6</const><br>
         <const>0</const> &le; <var>beaconCount</var> &le; <const>7</const><br>
+        <!-- END -->
         Temps de réponse pour le premier tour &le; <const>1000</const> ms<br>
         Temps de réponse par tour &le; <const>50</const> ms<br>
         Nombre maximum de tours : <const>120</const>
@@ -152,12 +215,14 @@
     </div>
   </div>
 
-  <!-- CODE SOURCE -->
+  <!-- CODE SOURCE & CRÉDITS -->
   <div class="statement-section statement-examples">
-    <h1><span class="icon icon-example">&nbsp;</span><span>Code Source</span></h1>
+    <h1><span class="icon icon-example">&nbsp;</span><span>Code Source &amp; Crédits</span></h1>
     <div class="statement-examples-text">
-      Le code source complet de l'arbitre (Referee), du viewer et des bots de référence est disponible sur GitHub :
-      <a href="https://github.com/codingame-team/codingame-chrono-tactics" target="_blank" rel="noopener noreferrer">https://github.com/codingame-team/codingame-chrono-tactics</a>
+      <p>Le code source complet de l'arbitre (Referee), du viewer et des bots de référence est disponible sur GitHub :
+        <a href="https://github.com/codingame-team/codingame-chrono-tactics" target="_blank" rel="noopener noreferrer">https://github.com/codingame-team/codingame-chrono-tactics</a>
+      </p>
+      <p><b>Crédits &amp; Inspiration :</b> Conception originale inspirée des jeux tactiques au tour par tour sur grille (notamment <i>Into the Breach</i> pour les mécaniques de poussée et d'arène qui se rétrécit). Développé avec le SDK officiel CodinGame Game Engine.</p>
     </div>
   </div>
 </div>

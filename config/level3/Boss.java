@@ -13,6 +13,7 @@ class Player {
         int leagueLevel = in.nextInt();
 
         while (true) {
+            int turn = in.nextInt();
             String[] grid = new String[height];
             for (int y = 0; y < height; y++) {
                 grid[y] = in.next();

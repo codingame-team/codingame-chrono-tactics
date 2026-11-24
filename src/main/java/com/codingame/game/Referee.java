@@ -76,9 +76,10 @@ public class Referee extends AbstractReferee {
 
         initGraphics();
 
-        // Send initialization input to players
+        // Send initialization input to players (3=Wood 3, 2=Wood 2, 1=Wood 1)
+        int woodDivision = Math.max(1, 4 - leagueLevel);
         for (Player player : gameManager.getActivePlayers()) {
-            player.sendInputLine(String.format("%d %d %d", Grid.WIDTH, Grid.HEIGHT, leagueLevel));
+            player.sendInputLine(String.format("%d %d %d", Grid.WIDTH, Grid.HEIGHT, woodDivision));
         }
     }
 
@@ -128,7 +129,9 @@ public class Referee extends AbstractReferee {
             .setAnchor(0.5)
             .setFontFamily("Lato")
             .setFontSize(36)
-            .setFillColor(0xd0e2ff)
+            .setFillColor(0xffffff)
+            .setStrokeThickness(4)
+            .setStrokeColor(0x000000)
             .setZIndex(20);
 
         // Player HUD panels
@@ -320,7 +323,7 @@ public class Referee extends AbstractReferee {
 
         // 1. Send inputs to each active player (Owner is ALWAYS 0 for self, 1 for opponent per guidelines!)
         for (Player player : gameManager.getActivePlayers()) {
-            sendTurnInput(player);
+            sendTurnInput(player, turn);
             player.execute();
         }
 
@@ -360,8 +363,9 @@ public class Referee extends AbstractReferee {
         checkEarlyEnd(turn);
     }
 
-    private void sendTurnInput(Player player) {
+    private void sendTurnInput(Player player, int turn) {
         int myIdx = player.getIndex();
+        player.sendInputLine(String.valueOf(turn));
         // Grid rows
         for (int y = 0; y < Grid.HEIGHT; y++) {
             player.sendInputLine(grid.getRowString(y));
@@ -622,7 +626,9 @@ public class Referee extends AbstractReferee {
                 target.setX(Math.max(0, Math.min(Grid.WIDTH - 1, nx)));
                 target.setY(Math.max(0, Math.min(Grid.HEIGHT - 1, ny)));
                 eliminateUnit(target, "pushed into the abyss by Unit " + pusher.getId());
-                pusher.getOwner().setScore(pusher.getOwner().getScore() + 15);
+                if (target.getOwner() != pusher.getOwner()) {
+                    pusher.getOwner().setScore(pusher.getOwner().getScore() + 15);
+                }
             } else {
                 target.setX(nx);
                 target.setY(ny);

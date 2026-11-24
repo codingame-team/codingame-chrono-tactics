@@ -71,9 +71,11 @@ public class Agent1 {
         Scanner in = new Scanner(System.in);
         int width = in.nextInt();
         int height = in.nextInt();
-        int leagueLevel = in.nextInt();
+        int woodDivision = in.nextInt();
+        int leagueLevel = 4 - woodDivision;
 
         while (true) {
+            int turn = in.nextInt();
             String[] grid = new String[height];
             for (int y = 0; y < height; y++) {
                 grid[y] = in.next();
