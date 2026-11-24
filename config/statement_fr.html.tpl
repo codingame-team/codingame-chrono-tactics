@@ -93,7 +93,7 @@
       <p><b>Actions inexécutables :</b> Les commandes syntaxiquement valides mais inexécutables (par exemple <action>MOVE</action> hors grille ou vers un obstacle/case occupée, ou <action>BOMB</action> avec <var>cooldown</var> &gt; <const>0</const> ou hors portée) sont simplement ignorées et n'entraînent pas la défaite. Cibler un pilier ou le vide avec <action>BOMB</action> à portée lorsque <var>cooldown</var> = <const>0</const> n'a aucun effet sur la case mais déclenche tout de même la recharge de <const>2</const> tours.</p>
       <!-- END -->
       <!-- BEGIN level3 -->
-      <p><b>Actions inexécutables :</b> Les commandes syntaxiquement valides mais inexécutables (par exemple <action>MOVE</action> hors grille ou vers un obstacle/case occupée, ou <action>BOMB</action>/<action>PUSH</action> avec <var>cooldown</var> &gt; <const>0</const> ou hors portée) sont simplement ignorées et n'entraînent pas la défaite. Cibler un pilier ou le vide avec <action>BOMB</action> à portée lorsque <var>cooldown</var> = <const>0</const> n'a aucun effet sur la case mais déclenche tout de même la recharge de <const>2</const> tours.</p>
+      <p><b>Actions inexécutables :</b> Les commandes syntaxiquement valides mais inexécutables (par exemple <action>MOVE</action> hors grille ou vers un obstacle/case occupée, ou <action>BOMB</action>/<action>PUSH</action> avec <var>cooldown</var> &gt; <const>0</const> ou hors portée) sont simplement ignorées et n'entraînent pas la défaite. Cibler un pilier ou le vide avec <action>BOMB</action> (à portée), ou une case vide avec <action>PUSH</action> (à distance de Manhattan de <const>1</const>), lorsque <var>cooldown</var> = <const>0</const> n'a aucun effet sur le plateau mais déclenche tout de même la recharge de <const>2</const> tours.</p>
       <!-- END -->
 
       <!-- VICTORY CONDITIONS -->
@@ -164,23 +164,22 @@
     <div class="blk">
       <div class="title">Sortie pour un Tour de Jeu</div>
       <div class="text">
-        <!-- BEGIN level1 -->
         <p><span class="statement-lineno">Une ligne par unité en vie que vous possédez</span> (dans l'ordre exact où elles apparaissent en entrée), contenant une commande de déplacement :</p>
-        <!-- END -->
-        <!-- BEGIN level2 level3 -->
-        <p><span class="statement-lineno">Une ligne par unité en vie que vous possédez</span> (dans l'ordre exact où elles apparaissent en entrée), contenant une commande de déplacement éventuellement suivie d'une action spéciale :</p>
-        <!-- END -->
         <ul>
           <li><action>MOVE</action> <var>x</var> <var>y</var> pour déplacer l'unité vers les coordonnées entières (<var>x</var>, <var>y</var>).</li>
           <li><action>WAIT</action> pour laisser l'unité immobile.</li>
         </ul>
-        <!-- BEGIN level2 level3 -->
+        <!-- BEGIN level2 -->
         <p>Une commande <action>MOVE</action> ou <action>WAIT</action> peut être suivie d'une action spéciale :</p>
         <ul>
           <li><action>BOMB</action> <var>tx</var> <var>ty</var> pour bombarder la case aux coordonnées entières (<var>tx</var>, <var>ty</var>).</li>
-          <!-- BEGIN level3 -->
+        </ul>
+        <!-- END -->
+        <!-- BEGIN level3 -->
+        <p>Une commande <action>MOVE</action> ou <action>WAIT</action> peut être suivie d'une action spéciale :</p>
+        <ul>
+          <li><action>BOMB</action> <var>tx</var> <var>ty</var> pour bombarder la case aux coordonnées entières (<var>tx</var>, <var>ty</var>).</li>
           <li><action>PUSH</action> <var>tx</var> <var>ty</var> pour pousser une unité aux coordonnées entières (<var>tx</var>, <var>ty</var>).</li>
-          <!-- END -->
         </ul>
         <!-- END -->
         <!-- BEGIN level1 -->
@@ -201,11 +200,11 @@
         <var>beaconCount</var> = <const>7</const><br>
         <!-- END -->
         <!-- BEGIN level2 -->
-        <const>1</const> &le; <var>unitCount</var> &le; <const>4</const><br>
+        <const>2</const> &le; <var>unitCount</var> &le; <const>4</const><br>
         <const>0</const> &le; <var>beaconCount</var> &le; <const>7</const><br>
         <!-- END -->
         <!-- BEGIN level3 -->
-        <const>1</const> &le; <var>unitCount</var> &le; <const>6</const><br>
+        <const>2</const> &le; <var>unitCount</var> &le; <const>6</const><br>
         <const>0</const> &le; <var>beaconCount</var> &le; <const>7</const><br>
         <!-- END -->
         Temps de réponse pour le premier tour &le; <const>1000</const> ms<br>

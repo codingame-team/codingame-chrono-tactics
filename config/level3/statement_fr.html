@@ -49,7 +49,7 @@
           Si toutes les unités d'un joueur sont éliminées, la partie s'arrête immédiatement et le survivant reçoit <b>+<const>20</const> points bonus</b> par unité encore en vie.
         </li>
       </ol>
-      <p><b>Actions inexécutables :</b> Les commandes syntaxiquement valides mais inexécutables (par exemple <action>MOVE</action> hors grille ou vers un obstacle/case occupée, ou <action>BOMB</action>/<action>PUSH</action> avec <var>cooldown</var> &gt; <const>0</const> ou hors portée) sont simplement ignorées et n'entraînent pas la défaite. Cibler un pilier ou le vide avec <action>BOMB</action> à portée lorsque <var>cooldown</var> = <const>0</const> n'a aucun effet sur la case mais déclenche tout de même la recharge de <const>2</const> tours.</p>
+      <p><b>Actions inexécutables :</b> Les commandes syntaxiquement valides mais inexécutables (par exemple <action>MOVE</action> hors grille ou vers un obstacle/case occupée, ou <action>BOMB</action>/<action>PUSH</action> avec <var>cooldown</var> &gt; <const>0</const> ou hors portée) sont simplement ignorées et n'entraînent pas la défaite. Cibler un pilier ou le vide avec <action>BOMB</action> (à portée), ou une case vide avec <action>PUSH</action> (à distance de Manhattan de <const>1</const>), lorsque <var>cooldown</var> = <const>0</const> n'a aucun effet sur le plateau mais déclenche tout de même la recharge de <const>2</const> tours.</p>
 
       <!-- VICTORY CONDITIONS -->
       <div class="statement-victory-conditions">
@@ -109,7 +109,7 @@
     <div class="blk">
       <div class="title">Sortie pour un Tour de Jeu</div>
       <div class="text">
-        <p><span class="statement-lineno">Une ligne par unité en vie que vous possédez</span> (dans l'ordre exact où elles apparaissent en entrée), contenant une commande de déplacement éventuellement suivie d'une action spéciale :</p>
+        <p><span class="statement-lineno">Une ligne par unité en vie que vous possédez</span> (dans l'ordre exact où elles apparaissent en entrée), contenant une commande de déplacement :</p>
         <ul>
           <li><action>MOVE</action> <var>x</var> <var>y</var> pour déplacer l'unité vers les coordonnées entières (<var>x</var>, <var>y</var>).</li>
           <li><action>WAIT</action> pour laisser l'unité immobile.</li>
@@ -127,7 +127,7 @@
       <div class="title">Contraintes</div>
       <div class="text">
         <var>width</var> = <const>11</const>, <var>height</var> = <const>11</const><br>
-        <const>1</const> &le; <var>unitCount</var> &le; <const>6</const><br>
+        <const>2</const> &le; <var>unitCount</var> &le; <const>6</const><br>
         <const>0</const> &le; <var>beaconCount</var> &le; <const>7</const><br>
         Temps de réponse pour le premier tour &le; <const>1000</const> ms<br>
         Temps de réponse par tour &le; <const>50</const> ms<br>

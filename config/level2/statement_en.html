@@ -96,7 +96,7 @@
     <div class="blk">
       <div class="title">Output for One Game Turn</div>
       <div class="text">
-        <p><span class="statement-lineno">One line per alive unit you own</span> (in the exact order they appear in the input), containing one movement command optionally followed by a special action:</p>
+        <p><span class="statement-lineno">One line per alive unit you own</span> (in the exact order they appear in the input), containing one movement command:</p>
         <ul>
           <li><action>MOVE</action> <var>x</var> <var>y</var> to move the unit toward the integer target coordinates (<var>x</var>, <var>y</var>).</li>
           <li><action>WAIT</action> to keep the unit stationary.</li>
@@ -113,7 +113,7 @@
       <div class="title">Constraints</div>
       <div class="text">
         <var>width</var> = <const>11</const>, <var>height</var> = <const>11</const><br>
-        <const>1</const> &le; <var>unitCount</var> &le; <const>4</const><br>
+        <const>2</const> &le; <var>unitCount</var> &le; <const>4</const><br>
         <const>0</const> &le; <var>beaconCount</var> &le; <const>7</const><br>
         Response time for first turn &le; <const>1000</const> ms<br>
         Response time for one turn &le; <const>50</const> ms<br>

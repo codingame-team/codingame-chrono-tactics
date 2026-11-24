@@ -93,7 +93,7 @@
       <p><b>Unexecutable Actions:</b> Syntactically valid actions that cannot be executed (such as <action>MOVE</action> outside the grid or toward an obstacle or occupied tile, or <action>BOMB</action> while <var>cooldown</var> &gt; <const>0</const> or out of range) are simply ignored and do not cause defeat. Targeting a pillar or void tile with <action>BOMB</action> within range while <var>cooldown</var> = <const>0</const> has no effect on the tile but still triggers the <const>2</const>-turn cooldown.</p>
       <!-- END -->
       <!-- BEGIN level3 -->
-      <p><b>Unexecutable Actions:</b> Syntactically valid actions that cannot be executed (such as <action>MOVE</action> outside the grid or toward an obstacle or occupied tile, or <action>BOMB</action>/<action>PUSH</action> while <var>cooldown</var> &gt; <const>0</const> or out of range) are simply ignored and do not cause defeat. Targeting a pillar or void tile with <action>BOMB</action> within range while <var>cooldown</var> = <const>0</const> has no effect on the tile but still triggers the <const>2</const>-turn cooldown.</p>
+      <p><b>Unexecutable Actions:</b> Syntactically valid actions that cannot be executed (such as <action>MOVE</action> outside the grid or toward an obstacle or occupied tile, or <action>BOMB</action>/<action>PUSH</action> while <var>cooldown</var> &gt; <const>0</const> or out of range) are simply ignored and do not cause defeat. Targeting a pillar or void tile with <action>BOMB</action> (within range) or an empty tile with <action>PUSH</action> (at Manhattan distance <const>1</const>) while <var>cooldown</var> = <const>0</const> has no board effect, but still triggers the <const>2</const>-turn cooldown.</p>
       <!-- END -->
 
       <!-- VICTORY CONDITIONS -->
@@ -164,23 +164,22 @@
     <div class="blk">
       <div class="title">Output for One Game Turn</div>
       <div class="text">
-        <!-- BEGIN level1 -->
         <p><span class="statement-lineno">One line per alive unit you own</span> (in the exact order they appear in the input), containing one movement command:</p>
-        <!-- END -->
-        <!-- BEGIN level2 level3 -->
-        <p><span class="statement-lineno">One line per alive unit you own</span> (in the exact order they appear in the input), containing one movement command optionally followed by a special action:</p>
-        <!-- END -->
         <ul>
           <li><action>MOVE</action> <var>x</var> <var>y</var> to move the unit toward the integer target coordinates (<var>x</var>, <var>y</var>).</li>
           <li><action>WAIT</action> to keep the unit stationary.</li>
         </ul>
-        <!-- BEGIN level2 level3 -->
+        <!-- BEGIN level2 -->
         <p>A <action>MOVE</action> or <action>WAIT</action> command is optionally followed by a special action:</p>
         <ul>
           <li><action>BOMB</action> <var>tx</var> <var>ty</var> to bomb the tile at the integer target coordinates (<var>tx</var>, <var>ty</var>).</li>
-          <!-- BEGIN level3 -->
+        </ul>
+        <!-- END -->
+        <!-- BEGIN level3 -->
+        <p>A <action>MOVE</action> or <action>WAIT</action> command is optionally followed by a special action:</p>
+        <ul>
+          <li><action>BOMB</action> <var>tx</var> <var>ty</var> to bomb the tile at the integer target coordinates (<var>tx</var>, <var>ty</var>).</li>
           <li><action>PUSH</action> <var>tx</var> <var>ty</var> to push a unit at the integer target coordinates (<var>tx</var>, <var>ty</var>).</li>
-          <!-- END -->
         </ul>
         <!-- END -->
         <!-- BEGIN level1 -->
@@ -201,11 +200,11 @@
         <var>beaconCount</var> = <const>7</const><br>
         <!-- END -->
         <!-- BEGIN level2 -->
-        <const>1</const> &le; <var>unitCount</var> &le; <const>4</const><br>
+        <const>2</const> &le; <var>unitCount</var> &le; <const>4</const><br>
         <const>0</const> &le; <var>beaconCount</var> &le; <const>7</const><br>
         <!-- END -->
         <!-- BEGIN level3 -->
-        <const>1</const> &le; <var>unitCount</var> &le; <const>6</const><br>
+        <const>2</const> &le; <var>unitCount</var> &le; <const>6</const><br>
         <const>0</const> &le; <var>beaconCount</var> &le; <const>7</const><br>
         <!-- END -->
         Response time for first turn &le; <const>1000</const> ms<br>
